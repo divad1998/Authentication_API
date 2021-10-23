@@ -7,6 +7,7 @@ import com.aneeque.codingchallenge.Response;
 import com.aneeque.codingchallenge.service.UserService;
 import com.aneeque.codingchallenge.utilities.Util;
 import com.aneeque.codingchallenge.entity.*;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,21 +32,17 @@ public class UserController {
 
         User newUser = userService.addUser(user);
 
-        Response response = new Response("Part of the family now, aren't you? User created.");
+        Response response = new Response("User created. Welcome!", null);
         return ResponseEntity
-                    .created(Util.generateUri(newUser.getId()))
+                    .created(Util.generateUri(newUser.getId())) //ToDo: test return of this uri
                     .body(response);
     }
 
-    // // Login endpoint
-    // @PostMapping("/login")
-    // public ResponseEntity<Response> login(LoginRequest loginRequest) {
-
-    // }
-
-    // Get all users endpoint
+    // Get-all-users endpoint
+    @Cacheable(value = "users")
     @GetMapping
     public Iterable<User> getUsers() {
+
         return userService.getUsers();
     }
 }

@@ -17,19 +17,19 @@ import lombok.Data;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private String id;
+    public String id;
 
     private String surname;
     private String firstName;
 
     @Email(message = "Invalid Email format.")
     @NotNull(message = "Email field can't be null.")
-    @NotBlank(message = "Email field can't be empty.") // ToDo: email has to be unique
+    @NotBlank(message = "Email field can't be empty.")
+    @Column(unique = true)
     private String email;
 
     @Column(unique = true)
@@ -38,16 +38,6 @@ public class User implements UserDetails {
     @NotNull(message = "Password can't be null.")
     @NotBlank(message = "Password can't be empty.")
     private String password;
-
-
-    public User(String id, String surname, String firstName, String email, String username, String password) {
-        this.id = id;
-        this.surname = surname;
-        this.firstName = firstName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
 
     public void setPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);

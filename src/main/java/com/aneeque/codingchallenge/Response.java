@@ -10,9 +10,11 @@ import lombok.Data;
 public class Response {
 
     private String message;
+    private String jwtToken;
 
-    public Response(String message) {
+    public Response(String message, String jwtToken) {
         this.message = message;
+        this.jwtToken = jwtToken;
     }
     
 }

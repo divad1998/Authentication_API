@@ -20,21 +20,26 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    public User addUser(User user) {
+
+        return userRepository.save(user);
+
+    }
+
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+    }
+
     public Iterable<User> getUsers() {
 
         return userRepository.findAll();
     }
 
-    public User addUser(User user) {
-        user.setPassword(user.getPassword());
-        return userRepository.save(user);
-
-    }
-
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         
-        return userRepository.findByEmail(email)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 }
