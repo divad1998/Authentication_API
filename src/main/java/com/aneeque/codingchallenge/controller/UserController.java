@@ -2,7 +2,6 @@ package com.aneeque.codingchallenge.controller;
 
 import javax.validation.Valid;
 
-import com.aneeque.codingchallenge.LoginRequest;
 import com.aneeque.codingchallenge.Response;
 import com.aneeque.codingchallenge.service.UserService;
 import com.aneeque.codingchallenge.utilities.Util;
@@ -32,7 +31,7 @@ public class UserController {
 
         User newUser = userService.addUser(user);
 
-        Response response = new Response("User created. Welcome!", null);
+        Response response = new Response("User created. Welcome!");
         return ResponseEntity
                     .created(Util.generateUri(newUser.getId())) //ToDo: test return of this uri
                     .body(response);

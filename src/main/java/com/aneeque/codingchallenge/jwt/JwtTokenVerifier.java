@@ -53,18 +53,19 @@ public class JwtTokenVerifier extends OncePerRequestFilter { // ensures filter i
 
     private UsernamePasswordAuthenticationToken getAuthentication(String authorization) {
 
-        String token = authorization.replace("Bearer ", "");
+        String token = authorization.replace("Bearer ", ""); // header is present
         User user = null;
 
         try {
+            // get username from token
             String username = require(algorithm)
                                 .build()
                                 .verify(token)
                                 .getSubject();
 
-            if (!Strings.isNullOrEmpty(username)) {
+            if (!Strings.isNullOrEmpty(username)) { // is username in db?
 
-                user = userService.getByUsername(username);
+                user = userService.getByUsername(username); // get user having the username
             }
 
         } catch (JWTVerificationException ex) {
@@ -73,6 +74,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter { // ensures filter i
         }
 
         assert user != null;
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), null, null); // don't forget Admin authority
+        return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), null);
     }
 }

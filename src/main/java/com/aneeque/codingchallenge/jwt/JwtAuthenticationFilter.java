@@ -1,10 +1,9 @@
 package com.aneeque.codingchallenge.jwt;
 
-import com.aneeque.codingchallenge.LoginRequest;
+import com.aneeque.codingchallenge.LoginBody;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +36,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtConfig = jwtConfig;
         this.algorithm = algorithm;
 
+        setFilterProcessesUrl("/auth/users");
+
     }
 
     @Override
@@ -44,11 +45,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             // get request body
-            LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
+            LoginBody loginBody = objectMapper.readValue(request.getInputStream(), LoginBody.class);
             // delegate authentication.
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                                                loginRequest.getUsername(),
-                                                loginRequest.getPassword());
+                                                loginBody.getUsername(),
+                                                loginBody.getPassword());
 
             return authManager.authenticate(authentication);
 
